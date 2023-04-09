@@ -5,3 +5,7 @@ module "aws-prod" {
   ami = "ami-0b7af114fb404cd23"
   chave = "iac-prod"
 }
+
+output "ip" {
+  value = module.aws-prod.ip_publico
+}
