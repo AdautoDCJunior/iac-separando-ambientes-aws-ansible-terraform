@@ -1,11 +1,11 @@
-module "aws-prod" {
+module "aws-dev" {
   source = "../../infra"
-  regiao_aws = "sa-east-1"
+  regiao_aws = "us-east-1"
   instancia = "t2.micro"
-  ami = "ami-0b7af114fb404cd23"
+  ami = "ami-0aa2b7722dc1b5612"
   chave = "iac-prod"
 }
 
 output "ip" {
-  value = module.aws-prod.ip_publico
+  value = module.aws-dev.ip_publico
 }
