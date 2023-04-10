@@ -11,23 +11,21 @@
       ansible.builtin.git:
         repo: https://github.com/alura-cursos/clientes-leo-api
         dest: /home/ubuntu/tcc
-        version: master 
-    # - name: instalando-dependencia-com-pip-django-django-rest
-    #   pip:
-    #     virtualenv: /home/ubuntu/tcc/venv
-    #     name:
-    #       - django
-    #       - djangorestframework
-    # - name: verifica-se-projeto-existe
-    #   stat:
-    #     path: /home/ubuntu/tcc/setup/settings.py
-    #   register: projeto
-    # - name: iniciando-projeto
-    #   shell: '. /home/ubuntu/tcc/venv/bin/activate; django-admin startproject setup /home/ubuntu/tcc/'
-    #   when: not projeto.stat.exists
-    # - name: alterando-host-settings-django
-    #   lineinfile:
-    #     path: /home/ubuntu/tcc/setup/settings.py
-    #     regexp: 'ALLOWED_HOSTS'
-    #     line: 'ALLOWED_HOSTS = ["*"]'
-    #     backrefs: yes
+        version: master
+        force: yes
+    - name: instalando-dependencia-com-pip-django-django-rest
+      pip:
+        virtualenv: /home/ubuntu/tcc/venv
+        requirements: /home/ubuntu/tcc/requirements.txt
+    - name: alterando-host-settings-django
+      lineinfile:
+        path: /home/ubuntu/tcc/setup/settings.py
+        regexp: 'ALLOWED_HOSTS'
+        line: 'ALLOWED_HOSTS = ["*"]'
+        backrefs: yes
+    - name: configura-banco-dados
+      shell: '. /home/ubuntu/tcc/venv/bin/activate; python /home/ubuntu/tcc/manage.py migrate'
+    - name: carrega-dados-iniciais
+      shell: '. /home/ubuntu/tcc/venv/bin/activate; python /home/ubuntu/tcc/manage.py loaddata clientes.json'
+    - name: inicia-servidor
+      shell: '. /home/ubuntu/tcc/venv/bin/activate; nohup python /home/ubuntu/tcc/manage.py runserver 0.0.0.0:8000 &'
